@@ -7,7 +7,6 @@
 #define BUFFER_SIZE 5
 #define MAX_ITEM 5
 
-
 int buffer[BUFFER_SIZE];
 int in=0,out =0;
 
@@ -70,10 +69,30 @@ void main(){
     }
     sem_destroy(&mutex);
     sem_destroy(&empty);
-    sem_destroy(&full);
-    
-    
-    
-    
-    
+    sem_destroy(&full);    
 }
+
+
+/*
+OUTPUT
+
+Enter the number of producers 
+3
+Enter the number of consumers 
+2
+Producer:83
+Producer:86
+Producer:77
+Producer:15
+Producer:35
+Producer:93
+Producer:86
+Producer:92
+Producer:49
+Producer:21
+Producer:62
+Producer:27
+Producer:90
+Producer:63
+Producer:59
+*/
