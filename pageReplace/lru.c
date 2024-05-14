@@ -74,3 +74,20 @@ void main(){
     printf("\nPage Frames\n");
     lru(arr,n ,F,frameNum);
 }
+
+/* OUTPUT
+
+LRU Page Replacement Algorithm
+Enter the number of frames: 3
+Enter the number of page requests: 7
+Enter the page string each seperated by a space
+1 3 0 3 5 6 3
+
+Pages
+1  3  0  3  5  6  3  
+Page Frames
+1  1  1  1  5  5  5  
+   3  3  3  3  3  3  
+      0  0  0  6  6  
+Page Faults(in LRU) = 5
+*/
