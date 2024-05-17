@@ -27,3 +27,30 @@ Hello from Parent! (Child PID: 604)
 
 //fork,exec
 
+
+//opendir ,readdir, closedir
+#include <dirent.h> 
+#include <stdio.h> 
+ int main() 
+{ 
+ DIR *dir = opendir("."); 
+ if (dir) {
+ struct dirent *entry; 
+ printf("Current Directory Contents\n");
+ while ((entry = readdir(dir)) != NULL) 
+{ 
+ printf("%s\n", entry->d_name); 
+ } 
+ closedir(dir); } 
+ return 0; 
+}
+/*output
+
+Current Directory Contents
+hello.c
+main.c
+..
+.
+a.out
+*/
+
