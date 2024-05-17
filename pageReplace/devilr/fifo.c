@@ -1,6 +1,7 @@
 #include <stdio.h>
 void main(){
     int i,j,k,n,f,pf,count=0;
+    printf("FIFO Page replacement\n");
     printf("enter the length of the refernce string\n");
     scanf("%d",&n);
     int rs[n];
