@@ -1,98 +1,85 @@
-#include <stdio.h>
-#include <semaphore.h>
-#include <pthread.h>
+#include<stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
-#define BUFFER_SIZE 5
-#define MAX_ITEM 5
-
-int buffer[BUFFER_SIZE];
-int in=0,out =0;
-
-sem_t mutex,empty,full;
-void*producer(void*arg){
-    int item;
-    for(int i=0;i<MAX_ITEM;i++){
-        item=rand()%100;
-        sem_wait(&empty);
-        sem_wait(&mutex);
-        buffer[in]=item;
-        printf("Producer:%d\n",item);
-        in = (in+1)%BUFFER_SIZE;
-        sem_post(&mutex);
-        sem_post(&full);
-        sleep(1);
-    }
-    pthread_exit(NULL);
-}
-
-void*consumer(void*arg){
-    int item;
-    for(int i=0;i<MAX_ITEM;i++){
-        sem_wait(&full);
-        sem_wait(&mutex);
-        item=buffer[out];
-        out=(out+1)%BUFFER_SIZE;
-        sem_post(&mutex);
-        sem_post(&empty);
-        sleep(2);
-    }
-    pthread_exit(NULL) ;
-}
-
+int mutex=1,full=0,empty=3,x=0;
 void main(){
-    int NUM_PRODUCERS,NUM_CONSUMERS;
-    printf("Enter the number of producers \n");
-    scanf("%d",&NUM_PRODUCERS);
-    printf("Enter the number of consumers \n");
-    scanf("%d",&NUM_CONSUMERS);
-    
-    pthread_t producer_threads[NUM_PRODUCERS],consumer_threads[NUM_CONSUMERS];
-    
-    sem_init(&mutex,0,1);
-    sem_init(&empty,0,BUFFER_SIZE);
-    sem_init(&full,0,0);
-    
-    for(int i=0;i<NUM_PRODUCERS;i++){
-        pthread_create(&producer_threads[i],NULL,producer,NULL);
+    int n;
+    void producer();
+    void consumer();
+    int wait(int);
+    int signal(int);
+    printf("\n1.PRODUCER\n2.CONSUMER\n3.EXIT\n");
+    while(1) {
+        printf("\nENTER YOUR CHOICE\n");
+        scanf("%d",&n);
+        switch(n){ 
+            case 1:
+            if((mutex==1)&&(empty!=0))
+                producer();
+            else
+                printf("BUFFER IS FULL");
+            break; 
+            case 2:
+            if((mutex==1)&&(full!=0))
+                consumer();
+            else
+                printf("BUFFER IS EMPTY");
+            break;
+            case 3:
+                exit(0);
+            break;
+        }
     }
-    
-    for(int i=0;i<NUM_CONSUMERS;i++){
-        pthread_create(&consumer_threads[i],NULL,consumer,NULL);
-    }
-    for(int i=0;i<NUM_PRODUCERS;i++){
-        pthread_join(producer_threads[i],NULL);
-    }
-    for(int i=0;i<NUM_CONSUMERS;i++){
-        pthread_join(consumer_threads[i],NULL);
-    }
-    sem_destroy(&mutex);
-    sem_destroy(&empty);
-    sem_destroy(&full);    
+}
+int wait(int s) {
+    return(--s); 
+}
+int signal(int s) {
+    return(++s); 
+}
+void producer() {
+    mutex=wait(mutex);
+    full=signal(full);
+    empty=wait(empty);
+    x++;
+    printf("\nproducer produces the item%d",x);
+    mutex=signal(mutex); 
+}
+void consumer() {
+    mutex=wait(mutex);
+    full=wait(full);
+    empty=signal(empty);
+    printf("\n consumer consumes item%d",x);
+    x--;
+    mutex=signal(mutex); 
 }
 
+/*output 
+1.PRODUCER
+2.CONSUMER
+3.EXIT
 
-/*
-OUTPUT
+ENTER YOUR CHOICE
+1
 
-Enter the number of producers 
-3
-Enter the number of consumers 
+producer produces the item1
+ENTER YOUR CHOICE
+1
+
+producer produces the item2
+ENTER YOUR CHOICE
 2
-Producer:83
-Producer:86
-Producer:77
-Producer:15
-Producer:35
-Producer:93
-Producer:86
-Producer:92
-Producer:49
-Producer:21
-Producer:62
-Producer:27
-Producer:90
-Producer:63
-Producer:59
+
+ consumer consumes item2
+ENTER YOUR CHOICE
+2
+
+ consumer consumes item1
+ENTER YOUR CHOICE
+1
+
+producer produces the item1
+ENTER YOUR CHOICE
+3 
+
 */
