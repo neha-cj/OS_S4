@@ -42,6 +42,7 @@ void main(){
 
 //code from devi L r youtube
 /*OUTPUT
+FIFO Page replacement
 enter the length of the refernce string
 7
 enter the string
