@@ -1,93 +1,88 @@
-#include <stdio.h>
-
-int pageIsFound(int f[],int count,int a){
-    for(int i=0;i<count;i++){
-        if(f[i]==a)
+#include<stdio.h>
+#include <limits.h>
+int checkHit(int incoming_page,int queue[],int occupied){
+    for(int i=0;i<occupied;i++){
+        if(incoming_page==queue[i])
             return 1;
     }
     return 0;
 }
-int recentAccessLRU(int arr[],int i,int a){
-    int count=0;
-    for(int j=i;j>=0;j--){
-        count++;
-        if(arr[j]==a)
-            return count;
-    }
-}
-void lru(int arr[],int n, int f[],int fno){
-    int index,count=0,p=0,i,j,k,x,lruArr[fno][n];
-    for( i=0;i<n;i++){
-        if(pageIsFound(f,count,arr[i])){}
-        else{
-            p++;
-            if(count == fno){
-                int max = -1;
-                for(j=0;j<fno;j++){
-                    x = recentAccessLRU(arr,i,f[j]);
-                    if(x > max){
-                        index = j;
-                        max = x;
-                    }
-                }
-                f[index] = arr[i];
-            }
-            else{
-                f[count++]=arr[i];
-            }
-        }
-        for(j=0,k=0;j<fno;j++){
-            if(k<count)
-                lruArr[k++][i] = f[j];
-            else 
-                lruArr[k++][i] = -1;
-        }
-    }
-    for(i=0;i<fno;i++){
-        for(j=0;j<n;j++){
-            if(lruArr[i][j] != -1)
-                printf("%d  ",lruArr[i][j]);
-            else 
-                printf("   ");
-        }
-        printf("\n");
-    }
-    printf("Page Faults(in LRU) = %d\n",p);
+void printFrame(int queue[],int occupied){
+    for(int i=0;i<occupied;i++)
+        printf("%d\t",queue[i]);
 }
 
 void main(){
-    printf("LRU Page Replacement Algorithm\n");
-    int n,i,frameNum;
-    printf("Enter the number of frames: ");
-    scanf("%d",&frameNum);
-    printf("Enter the number of page requests: ");
+    int incomingStream[20];
+    int n,f;
+    printf("LRU page Replacement..\n");
+    printf("enter the number of pages\n");
     scanf("%d",&n);
-    printf("Enter the page string each seperated by a space\n");
-    int arr[n],F[frameNum];
-    for(i=0;i<n;i++){
-        scanf("%d",&arr[i]);
+    printf("enter the incoming stream\n");
+    for(int i=0;i<n;i++)
+        scanf("%d",&incomingStream[i]);
+    printf("enter the no of frames\n");
+    scanf("%d",&f);
+    int queue[n];
+    int distance[n];
+    int occupied=0;
+    int pF=0;
+    printf("Page\t Frame1\t Frame2\t Frame3\n");
+    
+    for(int i=0;i<n;i++){
+        printf("%d:  \t\t",incomingStream[i]);
+        if(checkHit(incomingStream[i],queue,occupied)){
+            printFrame(queue,occupied);
+        }
+        else if(occupied<f){
+            queue[occupied]=incomingStream[i];
+            pF++;
+            occupied++;
+            printFrame(queue,occupied);
+        }
+        else{
+            int max=INT_MIN;
+            int index;
+            
+            for(int j=0;j<f;j++){
+                distance[j]=0;
+                //traverse in reverse to find at what distance frame item occured last
+                for(int k=i-1;k>=0;k--){
+                    ++distance[j];
+                    if(queue[j]==incomingStream[k])
+                        break;
+                }
+                //find frame item with max distance for LRU 
+                if(distance[j]>max){
+                    max=distance[j];
+                    index=j;
+                }
+                
+            }
+            queue[index]=incomingStream[i];
+            printFrame(queue,occupied);
+            pF++;
+            
+        }
+        printf("\n");
     }
-    printf("\nPages\n");
-    for(i=0;i<n;i++){
-        printf("%d  ",arr[i]);
-    }
-    printf("\nPage Frames\n");
-    lru(arr,n ,F,frameNum);
+    printf("Page Faults: %d",pF);
 }
-
-/* OUTPUT
-
-LRU Page Replacement Algorithm
-Enter the number of frames: 3
-Enter the number of page requests: 7
-Enter the page string each seperated by a space
+/*OUPTUT
+LRU page Replacement..
+enter the number of pages
+7
+enter the incoming stream
 1 3 0 3 5 6 3
-
-Pages
-1  3  0  3  5  6  3  
-Page Frames
-1  1  1  1  5  5  5  
-   3  3  3  3  3  3  
-      0  0  0  6  6  
-Page Faults(in LRU) = 5
+enter the no of frames
+3
+Page     Frame1  Frame2  Frame3
+1:              1
+3:              1       3
+0:              1       3       0
+3:              1       3       0
+5:              5       3       0
+6:              5       3       6
+3:              5       3       6
+Page Faults: 5
 */
