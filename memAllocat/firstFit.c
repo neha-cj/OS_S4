@@ -35,7 +35,7 @@ void firstFit(int blockSize[], int m, int processSize[], int n){
 
 int main() {
     int m, n;
-    print("First Fit Allocation\n");
+    printf("First Fit Allocation\n");
     printf("Enter the number of blocks: ");
     scanf("%d", &m);
 
