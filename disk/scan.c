@@ -33,19 +33,24 @@ void main() {
             break;
         }
     }
-    
+    int ind=0;
+    int seekSequence[100];
+    seekSequence[ind++]=initial;
     //if movement is towards high value
     if(move==1) {
         for(i=index;i<n;i++) {
             TotalHeadMoment=TotalHeadMoment+abs(RQ[i]-initial);
             initial=RQ[i];
+            seekSequence[ind++]=initial;
         }
         //last movement for max size
         TotalHeadMoment=TotalHeadMoment+abs(size-RQ[i-1]-1);
         initial=size-1;
+        seekSequence[ind++]=initial;
         for(i=index-1;i>=0;i--) {
             TotalHeadMoment=TotalHeadMoment+abs(RQ[i]-initial);
             initial=RQ[i];
+            seekSequence[ind++]=initial;
         }
     }
     
@@ -54,17 +59,24 @@ void main() {
         for(i=index-1;i>=0;i--) {
             TotalHeadMoment=TotalHeadMoment+abs(RQ[i]-initial);
             initial=RQ[i];
+            seekSequence[ind++]=initial;
         }
         //last movement for min size
         TotalHeadMoment=TotalHeadMoment+abs(RQ[i+1]-0);
         initial=0;
+        seekSequence[ind++]=initial;
         for(i=index;i<n;i++) {
             TotalHeadMoment=TotalHeadMoment+abs(RQ[i]-initial);
             initial=RQ[i];
+            seekSequence[ind++]=initial;
         }
     }
     
     printf("Total head movement is %d",TotalHeadMoment);
+    printf("\nseekSequence is: ");
+    for(int i=0;i<ind;i++){
+        printf("%d  ",seekSequence[i]);
+    }
 }
 
 /*OUTPUT 
@@ -74,4 +86,5 @@ Enter initial head position: 53
 Enter total disk size: 200
 Enter the head movement direction(1/0): 0
 Total head movement is 243
+seekSequence is: 53  43  24  16  0  82  140  170  190
 */
