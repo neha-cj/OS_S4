@@ -1,43 +1,47 @@
 #include <stdio.h>
+
 void main(){
     int i,j,k,n,f,pf,count=0;
-    printf("FIFO Page replacement\n");
-    printf("enter the length of the refernce string\n");
+    printf("enter length of refernce string: ");
     scanf("%d",&n);
     int rs[n];
     printf("enter the string\n");
     for(i=0;i<n;i++){
         scanf("%d",&rs[i]);
     }
-    printf("enter the number of frames\n");
+    printf("enter number of frames: ");
     scanf("%d",&f);
-    int m[f];
+    int frame[f];
+    
+    //set -1 for all frames
     for(i=0;i<f;i++){
-        m[i]=-1;
+        frame[i]=-1;
     }
-    printf("page Replaemet...\n");
+    
     for(i=0;i<n;i++){
         for(k=0;k<f;k++){
-            if(m[k]==rs[i]){
+            if(frame[k]==rs[i]){ //page hit
                 break;
             }
         }
-        if(k==f){
-            m[count++]=rs[i];
+        if(k==f){ //page not in frame page miss
+            frame[count++]=rs[i];
             pf++;
         }
-    for(j=0;j<f;j++)
-     printf("\t%d",m[j]);
-        
-    if(k==f)
-     printf("\t PF NO.%d",pf);
-     printf("\n");
-    if(count==f)
-    count=0;
-        
+        for(j=0;j<f;j++){  //printing currrent contents of frame
+            printf("\t%d",frame[j]);
+            
+        }
+        if(k==f){         //writing page fault on side
+            printf("\t PF no.%d",pf);
+            
+        }
+        printf("\n");
+        if(count==f){               //reset the count value (since in fifo older pages gets replaced)
+            count=0;
+        }
     }
-     printf("\n The number of page faults using FIFO : %d",pf);
-    
+    printf("\n The number of page faults : %d",pf);
 }
 
 //code from devi L r youtube
