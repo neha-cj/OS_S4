@@ -29,23 +29,23 @@ void main(){
     int pF=0;
     printf("Page\t Frame1\t Frame2\t Frame3\n");
     
-    for(int i=0;i<n;i++){
+    for(int i=0;i<n;i++){  //loop through incoming stram'
         printf("%d:  \t\t",incomingStream[i]);
-        if(checkHit(incomingStream[i],queue,occupied)){
+        if(checkHit(incomingStream[i],queue,occupied)){  //check for hi
             printFrame(queue,occupied);
         }
-        else if(occupied<f){
+        else if(occupied<f){        //handle empty frames
             queue[occupied]=incomingStream[i];
             pF++;
             occupied++;
             printFrame(queue,occupied);
         }
-        else{
-            int max=INT_MIN;
-            int index;
+        else{                   //handle page replacement using LRU
+            int max=INT_MIN;          //to find max distance
+            int index;             //store position of frame to be replaces
             
-            for(int j=0;j<f;j++){
-                distance[j]=0;
+            for(int j=0;j<f;j++){       //for each frame j the distcace since ists last use is calculated
+                distance[j]=0;          //keeps track of how many page requests have passed since the frame queue[j] wa last used
                 //traverse in reverse to find at what distance frame item occured last
                 for(int k=i-1;k>=0;k--){
                     ++distance[j];
@@ -53,8 +53,8 @@ void main(){
                         break;
                 }
                 //find frame item with max distance for LRU 
-                if(distance[j]>max){
-                    max=distance[j];
+                if(distance[j]>max){ 
+                    max=distance[j];      
                     index=j;
                 }
                 
