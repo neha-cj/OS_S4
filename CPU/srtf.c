@@ -71,11 +71,11 @@ void main(){
     printf("\n|");
     for (int i = 0; i < totalTime; i++) {
         if (i == 0 || order[i] != order[i - 1]) {
-            printf(" P%d (%d)|", p[order[i]].pid,p[order[i]].ct);
+            printf(" (%d) P%d |", i,p[order[i]].pid);
         }
     }
     printf("\n");
     
-    //printf("  %d\n", totalTime);
+    printf("  %d\n", totalTime);
 
 }
