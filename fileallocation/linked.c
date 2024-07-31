@@ -1,72 +1,42 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_BLOCKS 100
-
-struct File {
-    char filename[20];
-    int start_block;
-    int next_block[MAX_BLOCKS]; 
-};
-
-// Function to allocate blocks using Linked Allocation
-void allocateLinked(struct File* f, const char* filename, int startBlock, int nextBlocks[]) {
-    strcpy(f->filename, filename);
-    f->start_block = startBlock;
-    for (int i = 0; i < MAX_BLOCKS; i++) {
-        f->next_block[i] = nextBlocks[i];
-    }
-}
-
-int main() {
-    struct File myfile;
-    char filename[20];
-    int start;
-    int lnkBlocks[MAX_BLOCKS] = { [0 ... 99] = -1 }; // Initialize all blocks to -1 (indicating end of file)
-    int numBlocks, nextBlock;
-
-    printf("Enter the filename for Linked Allocation: ");
-    scanf("%19s", filename);
-
-    printf("Enter the start block: ");
-    scanf("%d", &start);
-
-    printf("Enter the number of blocks: ");
-    scanf("%d", &numBlocks);
-
-    // Get the blocks from the user
-    printf("Enter the blocks in sequence (-1 to end):\n");
-    for (int i = 0; i < numBlocks; i++) {
-        int currentBlock;
-        printf("Block %d: ", i + 1);
-        scanf("%d", &currentBlock);
-        if (currentBlock == -1) {
-            break;
+#include<stdio.h>
+#include<stdlib.h>
+int main() 
+{ 
+    int f[50],p,a,st,len,n,c;
+    for(int i=0;i<50;i++)
+        f[i]=0; //initialize all blocks to 0 (unallocated)
+    printf("Enter how many blocks that are already allocated :");
+    scanf("%d",&p);
+    if(p!=0)
+    {
+        printf("\nEnter the blocks no.s that are already allocated :");
+        for(int i=0;i<p;i++)
+        {
+            scanf("%d",&a);
+            f[a]=1; //allocate the blocks
         }
-        if (i == 0) {
-            lnkBlocks[start] = currentBlock;
-        } else {
-            lnkBlocks[nextBlock] = currentBlock;
-        }
-        nextBlock = currentBlock;
     }
-    lnkBlocks[nextBlock] = -1; // Mark the end of the file
+    do{
+        printf("Enter the starting index block & length :");
+        scanf("%d%d",&st,&len);
+        int k=len;
 
-    // Allocate linked blocks for the file
-    allocateLinked(&myfile, filename, start, lnkBlocks);
-
-    printf("Linked Allocation:\n");
-    printf("File Name: %s\n", myfile.filename);
-    printf("Start Block: %d\n", myfile.start_block);
-    printf("Blocks: ");
+        for(int j=st;j<(k+st);j++)
+        {
+            if(f[j]==0)
+            {
+                f[j]=1;
+                printf("\n%d->%d",j,f[j]);
+            }
+            else
+            { 
+                printf("\n %d->file is already allocated",j);
+                k++;
+            }
+        }
+        printf("\n If u want to enter one more file? (yes-1/no-0)");
+        scanf("%d",&c);
+    }while(c==1);
     
-    int currentBlock = myfile.start_block;
-    while (currentBlock != -1) {
-        printf("%d -> ", currentBlock);
-        currentBlock = myfile.next_block[currentBlock];
-    }
-    printf("NULL\n");
-
-    return 0;
 }
+
