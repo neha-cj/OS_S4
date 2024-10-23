@@ -23,7 +23,7 @@ void main(){
         scanf("%d",&incomingStream[i]);
     printf("enter the no of frames\n");
     scanf("%d",&f);
-    int queue[n];
+    int queue[f];
     int distance[n];
     int occupied=0;
     int pF=0;
