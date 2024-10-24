@@ -24,8 +24,8 @@ int recentAccess(int arr[],int i,int a){  //how recently each page in frame was 
     }
 }
 void lfu(int arr[],int n, int f[],int fno){
-    int index=-1,count=0,p=0,i,j,x,k,lfuArr[fno][n];
-    int m1,m2;
+    int index=-1,count=0,p=0,i,j,k,lfuArr[fno][n];
+    
     int temp[fno][2];
     for( i=0;i<n;i++){        //loop iterates over each page requests 
         if(pageIsFound(f,count,arr[i])){}    //check hit..if hit do nothing
