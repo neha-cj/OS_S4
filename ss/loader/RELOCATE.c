@@ -1,81 +1,119 @@
 #include <stdio.h>
 #include <string.h>
-
-int main() {
-    FILE *fp1, *fpOut; // File pointers for input and output files
-    int i, hexaddr, start_hexaddr;
-    char line[50], addr[10];
-
-    // Open input file for reading
+#include <stdlib.h>
+void convert(char h[12]);   //function to convert bitmask into relocation bits
+char bitmask[12];       //max bit mask length is 12
+char bit[12] = {0};
+void main() {
+    char input[10], binary[12], relocbit, ch, pn[5];
+    int add[6], length[10];
+    int start, inp, len, i, address, opcode, addr, actualadd, tlen;
+    FILE *fp1, *fp2;
+    printf("\n\n Enter the actual starting address : ");    //getting starting address from user
+    scanf("%x", &start);
     fp1 = fopen("input.txt", "r");
-    if (fp1 == NULL) {
-        perror("Error opening input file");
-        return 1;
-    }
-
-    // Open output file for writing
-    fpOut = fopen("output.txt", "w");
-    if (fpOut == NULL) {
-        perror("Error opening output file");
-        fclose(fp1);
-        return 1;
-    }
-
-    // Get the starting address from the user
-    printf("Enter the actual starting address: ");
-    scanf("%x", &start_hexaddr);
-
-    // Read each line from the input file
-    while (fscanf(fp1, "%s", line) == 1) {
-        if (line[0] == 'T') {
-            // Extract the address portion from the T-record
-            strncpy(addr, &line[1], 6);
-            addr[6] = '\0';
-
-            // Convert the extracted address to an integer
-            sscanf(addr, "%x", &hexaddr);
-
-            // Write relocated addresses and object code to output file
-            i = 9; // Start after the address and length fields in T-record
-            while (line[i] != '\0') {
-                // Write to the output file instead of printing to console
-                fprintf(fpOut, "%x \t %c%c\n", hexaddr + start_hexaddr, line[i], line[i + 1]);
-                hexaddr += 1; // Move to the next address
-                i += 2; // Move to the next byte in the T-record
+    fp2 = fopen("output.txt", "w");
+    fscanf(fp1, "%s", input);       //read input type from input file
+    fprintf(fp2, " ----------------------------\n");
+    fprintf(fp2, " ADDRESS\tCONTENT\n");
+    fprintf(fp2, " ----------------------------\n");
+    while (strcmp(input, "E") != 0) {       //until input record type is not E
+        if (strcmp(input, "H") == 0) {      //until input  type is H
+            fscanf(fp1, "%s", pn);        //read program name
+            fscanf(fp1, "%x", add);     //read starting address from file
+            fscanf(fp1, "%x", length);  //read object program length
+            fscanf(fp1, "%s", input);   //read input record type
+        }
+        if (strcmp(input, "T") == 0) {
+            fscanf(fp1, "%x", &address);    //read starting address of object code in this record
+            fscanf(fp1, "%x", &tlen);       //read length of obj code in this record
+            fscanf(fp1, "%s", bitmask);     //read relocation bitmask of this record
+            address += start;       //adding text address to start address
+            convert(bitmask);
+            len = strlen(bit);  //length of bit mask
+            if (len >= 11)
+                len = 10;       //adjust len to 10 since maximum object code in a text record is 10
+            for (i = 0; i < len; i++) {
+                fscanf(fp1, "%x", &opcode);     //read opcode
+                fscanf(fp1, "%x", &addr);       //read operand address
+                relocbit = bit[i];      //each relocation bit extracted to relocbit
+                if (relocbit == '0')    //if relocbit is 0
+                    actualadd = addr;   //relocated address is addr
+                else
+                    actualadd = addr + start;   //relocated address is sum of start addr given and addr
+                fprintf(fp2, "\n  %x\t\t%x%x\n", address, opcode, actualadd);
+                address += 3;
             }
+            fscanf(fp1, "%s", input);
         }
     }
-
-    // Close files
+    fprintf(fp2, " ----------------------------\n");
     fclose(fp1);
-    fclose(fpOut);
-
-    printf("Data written to output.txt successfully.\n");
-    return 0;
+    fclose(fp2);
+    printf("\n\n The contents of output file(output.txt) \n\n");
+    fp2 = fopen("output.txt", "r");
+    ch = fgetc(fp2);
+    while (ch != EOF) {
+        printf("%c", ch);
+        ch = fgetc(fp2);
+    }
+    fclose(fp2);
 }
-/*//input.txt
-HCOPY 000000000232
-T0000001114203348303910203642033483039100203
-T0020000C298300230000282030302015
-E001000
-output.txt
-3000 	 14
-3001 	 20
-3002 	 33
-3003 	 48
-3004 	 30
-3005 	 39
-3006 	 10
-3007 	 20
-3008 	 36
-3009 	 42
-300a 	 03
-300b 	 34
-300c 	 83
-300d 	 03
-300e 	 91
-300f 	 00
-3010 	 20
-3011 	 3
 
-  */
+void convert(char h[12]) {
+    int i, l;
+    strcpy(bit, "");
+    l = strlen(h);
+    for (i = 0; i < l; i++) {
+        switch (h[i]) {
+        case '0':
+            strcat(bit, "0");
+            break;
+        case '1':
+            strcat(bit, "1");
+            break;
+        case '2':
+            strcat(bit, "10");
+            break;
+        case '3':
+            strcat(bit, "11");
+            break;
+        case '4':
+            strcat(bit, "100");
+            break;
+        case '5':
+            strcat(bit, "101");
+            break;
+        case '6':
+            strcat(bit, "110");
+            break;
+        case '7':
+            strcat(bit, "111");
+            break;
+        case '8':
+            strcat(bit, "1000");
+            break;
+        case '9':
+            strcat(bit, "1001");
+            break;
+        case 'A':
+            strcat(bit, "1010");
+            break;
+        case 'B':
+            strcat(bit, "1011");
+            break;
+        case 'C':
+            strcat(bit, "1100");
+            break;
+        case 'D':
+            strcat(bit, "1101");
+            break;
+        case 'E':
+            strcat(bit, "1110");
+            break;
+        case 'F':
+            strcat(bit, "1111");
+            break;
+        }
+    }
+}
