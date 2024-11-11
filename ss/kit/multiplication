@@ -1,0 +1,40 @@
+2000 MOV SI,3000
+2003 MOV DI,4000
+2006 MOV AX, [SI]
+2008 INC SI
+2009 INC SI
+200A MOV BX, [SI]
+200C MUL BX
+200E MOV [DI],AX
+2010 INC DI
+2011 INC DI
+2012 MOV [DI],DX
+2014 HLT
+
+
+Input
+Address	Data
+3003:		07
+3002:		08
+3001:		04
+3000:		03
+Output
+Address	Data
+4003:		00
+4002:		1C
+4001:		35
+4000:		18
+
+1.Start the program
+2. Set the source index register SI to point to memory address 3000.
+3. Set the destination index register DI to point to memory address 4000.
+4.Load the value at the memory address pointed by SI into the AX register.
+5.Increment SI by 2 (assuming SI points to word or 2 bytes in memory)
+6.Load the value at the updated memory address pointed by SI into the BX register
+7.Multiply the value in AX by the value in BX, storing the result in AX (product) and DX (high-order bits of the product)
+8.Store the value in AX at the memory address pointed by DI.
+9.Increment DI by 2 (assuming DI points to a word or 2 bytes in memory)
+10. Store the value in DX at the updated memory address pointed by DI.
+11. Halt the program
+
+
