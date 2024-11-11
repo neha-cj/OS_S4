@@ -1,0 +1,38 @@
+2000 MOV SI,3000
+2003 MOV DI,4000
+2006 MOV AX, [SI]
+2008 INC SI
+2009 INC SI
+200A MOV BX, [SI]
+200C DIV BX
+200E MOV [DI],AX
+2010 INC DI
+2011 INC DI
+2012 MOV [DI],DX
+2014 HLT
+
+
+Input
+Address	Data
+3002:		24
+3001:		CF
+3000:		2D
+
+Output
+Address	Data
+4000:		D1
+
+  
+1. Start the program
+2. Set SI source index register to point to memory address 3000.
+2. Set DI destination index register to point to memory address 4000.
+4. Load the value at the memory address pointed by SI into register AX.
+5. Increment the SI register by 2, assuming it’s pointing to a word (2 bytes) in memory.
+6. Load the value at the updated memory address (now 3002 after incrementing SI by 2) into register BX. This value will act as the divisor in the division operation.
+7. Divide the value in AX (dividend) by the value in BX (divisor). After this division:
+•	The quotient of the division is stored in AX.
+•	The remainder of the division is stored in DX.
+8.  Store the quotient (from AX) at the memory address pointed to by DI.
+9.Increment the DI register by 2 to point to the next memory location, preparing to store the remainder.
+10. Store the remainder (from DX) at the updated memory address pointed to by DI 
+11. Halt the program execution with the HLT instruction.
