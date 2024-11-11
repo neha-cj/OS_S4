@@ -1,0 +1,78 @@
+2000 MOV SI,4000
+2003 MOV BX,(SI]
+2005 DEC BX
+2007 MOV SI,4000
+200A MOV CX,[SI]
+200C DEC CX
+200E INC SI
+2010 MOV AX,[SI]
+2012 INC SI
+2013 INC SI
+2014 CMP AX,[SI]
+2016 JC 201E
+2018 XCHG AX,(SI]
+201A DEC SI
+201B DEC SI
+201C XCHG AX,[SI]
+201E INC SI
+201F INC SI
+2020 DEC CX
+2022 JNZ 2010
+2024 DEC BX
+2026 JNZ 2007
+2028 HLT
+
+Input
+Memory Address	Value
+4000			05
+4001			10
+4002			15
+4003			23
+4004			22
+4005			40
+4006			80
+4007			00
+4008			30
+4009 			00
+400A			10
+
+Output
+Memory Address	Value
+4001			00
+4002			10
+4003			10
+4004			15
+4005			23
+4006			22
+4007			00
+4008			30
+4009			40
+400A			80
+
+
+
+1.Initialize registers: SI, BX, CX, AX.
+2. Load SI with the address 4000
+3.Load BX with the value at the memory address pointed by SI ([SI]).
+4.Decrement the value in BX
+5. Store the decremented value back in the memory address pointed by SI ([SI]).
+6.Load SI with the address 4000
+7. Load CX with the value at the memory address pointed by SI ([SI]).
+8. Decrement the value in CX.
+9. Increment the value in SI.
+10. Load AX with the value at the memory address pointed by SI ([SI])
+11. Increment SI twice to point to the next memory address.
+12. Compare AX with the value at the memory address pointed by SI ([SI]).
+13. If AX is less than the value at the memory address. jump to label 201E
+14. Exchange the values of AX and the memory address pointed by SI.
+15. Decrement SI twice
+16. Exchange the values of AX and the memory address pointed by SI.
+17. Increment SI twice.
+18. Increment SI twice
+19. Decrement CX.
+20. If CX is not zero, jump to label 2010
+21. Decrement BX.
+22. If BX is not zero, jump to label 2007
+23. Halt the execution
+
+
