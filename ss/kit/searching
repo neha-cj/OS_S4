@@ -1,0 +1,16 @@
+2000    MOV SI, 3000            ; Initialize SI to point to the start of the array at 3000h
+2003    MOV DI, 4000            ; Initialize DI to point to result storage at 4000h
+2006    MOV CX, 0005            ; Number of elements in the array (5)
+2009    MOV BX, 5000          ; Target value to search for (9ABCh)
+
+200C    MOV AX, [SI]            ; Load the current 16-bit element from array into AX
+200E    CMP AX, BX              ; Compare the current element with target
+2010    JE 201B                ; Jump to FOUND if element matches target
+
+2012    ADD SI,2              ; Move to the next 16-bit element (increment SI by 2)
+2014    DEC CX                  ; Decrement CX (number of elements left to search)
+2015    JNZ 200C        ; If CX is not zero, repeat the loop
+2017    MOV [DI], 0FFh          ; Store FF at DI (4000h) if target not found
+201A    HLT                     ; Halt the program
+201B    MOV [DI], 0Ah           ; Store 0A at DI (4000h) if target found
+201E    HLT                     ; Halt the program
