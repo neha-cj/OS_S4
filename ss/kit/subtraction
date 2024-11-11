@@ -1,0 +1,56 @@
+2000 MOV SI,3000
+2003 MOV DI,4000
+2086MOV AX,[SI]
+2008 INC SI
+2009 INC SI
+200A MOV BX,[SI]
+200C CMP AX,BX
+200E JC 2017
+2010 SUB AX,BX
+2012 MOV [DI],0000
+2015 JMP 2022
+2017 MOV CX,AX
+2019 MOV AX,BX
+201B MOV BX,CX
+201C SUB AX,BX
+201E MOV [DI],AX
+2022 HLT
+
+
+Input
+Address	Data
+3003:		00
+3002:		60
+3001:		00
+3000:		50
+Output
+Address	Data
+4003:		00
+4002:		01
+4001:		00
+4000:		00
+1.Start the program
+2.Set SI register to the memory address 3000
+3.Set DI register to the memory address 4000
+4.Load the value at the memory address stored in SI into the AX register.
+5.Increment the SI register by 2 (assuming SI points to a word or 2 bytes)
+6.Load the value at the updated memory address stored in SI into the BX register.
+7.Compare the values in AX and BX.
+	1. If AX is less than BX, jump to memory address 2017.
+	2. Otherwise, continue to the next instruction.
+8. Subtract BX from AX.
+9.Store the value 0000 at the memory address stored in DI.
+10.Jump to memory address 2022.
+11.If AX was less than BX:
+	1.Move the value in AX to the CX register
+	2. Move the value in BX to AX.
+	3. Move the value in CX to BX.
+	4. Subtract BX from AX.
+	5. Store the value 0001 at the memory address stored in DI.
+12. Increment the DI register by 1.
+13. Store the value in AX at the memory address stored in DI.
+14. Halt the program
+
+
+
+
