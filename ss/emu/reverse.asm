@@ -40,7 +40,8 @@ PRINT:
     INT 21H
     LEA DX, STR1
     MOV AH, 09H
-    INT 21H    MOV AH, 4CH
+    INT 21H    
+    MOV AH, 4CH
     INT 21H
 code ENDS
-END STAR
+END START
