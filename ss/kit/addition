@@ -1,0 +1,44 @@
+2000 MOV SI.3000
+2003 MOV DI,4000
+2006 MOV AX,[SI]
+2008 INC SI
+2009 INC SI
+208A MOV BX, [SI]
+200C ADD AX,BX
+200E JNC 2015
+2010 MOV [DI),0001
+2013 JMP 2018
+2015 MOV [DI],0000
+2018 INC DI
+2019 MOV [DI].AX
+201B HLT
+
+Input
+Address	Data
+3003:		F0
+3002:		02
+3001:		F0
+3000:		02
+Output
+Address	Data
+4003:		00
+4002:		01
+4001:		E0
+4000:		04
+
+
+1.Start the program
+2.Set the source Index (SI) register to point to memory address 3000.
+3.Set the Destination Index (DI) register to point to memory address 4000.
+4.Load the value stored at the memory address pointed to by SI into the AX register.
+5.Increment the SI register by 2 bytes (assuming SI is pointing to a word or 2 bytes)
+6.Load the value stored at the updated memory address pointed to by SI into the BX register.
+7.Add the values stored in AX and BX registers and store the result in the AX register.
+8.Check if there was no carry generated during the addition
+	1.If no carry occurred, store the value 0001 at the memory address pointed to by DI.
+	2. If a carry occurred, store the value 0000 at the memory address pointed to by DI.
+9.Increment the DI register to point to the next memory address.
+10. Store the contents of the AX register at the memory address pointed to by DI.
+11. Halt the execution of the program
+
+
