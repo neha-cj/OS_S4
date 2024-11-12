@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void main(){
-    int i,j,k,n,f,pf,count=0;
+    int i,j,k,n,f,pf,count=0;//'count' to track FIFO replacement
     printf("enter length of refernce string: ");
     scanf("%d",&n);
     int rs[n];
@@ -18,26 +18,26 @@ void main(){
         frame[i]=-1;
     }
     
-    for(i=0;i<n;i++){
-        for(k=0;k<f;k++){
+    for(i=0;i<n;i++){     // Process each page in the reference string
+        for(k=0;k<f;k++){   // Check if the current page rs[i] is already in any frame
             if(frame[k]==rs[i]){ //page hit
-                break;
+                break;  // Exit loop if page found in frames
             }
         }
-        if(k==f){ //page not in frame page miss
-            frame[count++]=rs[i];
+        if(k==f){  // If k equals f, the page was not found in any frame (page fault)
+            frame[count++]=rs[i];        Insert page in the next frame (FIFO order)
             pf++;
         }
         for(j=0;j<f;j++){  //printing currrent contents of frame
             printf("\t%d",frame[j]);
             
         }
-        if(k==f){         //writing page fault on side
+        if(k==f){         //writing page fault on side  // Indicate a page fault if the page was not in any frame
             printf("\t PF no.%d",pf);
             
         }
         printf("\n");
-        if(count==f){               //reset the count value (since in fifo older pages gets replaced)
+        if(count==f){                // If count reaches the number of frames, reset to 0 to follow FIFO replacement
             count=0;
         }
     }
