@@ -45,17 +45,19 @@ void main(){
             int index;             //store position of frame to be replaces
             
             for(int j=0;j<f;j++){       //for each frame j the distcace since ists last use is calculated
-                distance[j]=0;          //keeps track of how many page requests have passed since the frame queue[j] wa last used
+                distance[j]=0;         
+                //keeps track of how many page requests have passed since the frame queue[j] wa last used  // Reset distance for each frame
+                
                 //traverse in reverse to find at what distance frame item occured last
                 for(int k=i-1;k>=0;k--){
                     ++distance[j];
                     if(queue[j]==incomingStream[k])
-                        break;
+                        break;   // Stop if we find the page in the stream
                 }
                 //find frame item with max distance for LRU 
                 if(distance[j]>max){ 
                     max=distance[j];      
-                    index=j;
+                    index=j; //Store the index of the least recently used page
                 }
                 
             }
