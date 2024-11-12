@@ -55,17 +55,19 @@ void main() {
 
         if (strcmp(opcode, "WORD") == 0 || strcmp(opcode, "BYTE") == 0) {
             if (strcmp(opcode, "WORD") == 0) {
-                fprintf(fp_samp, "00000%s^", operand);
+                fprintf(fp_samp, "00000%s^", operand);    // Write object code for WORD
                 reclen += 6;
-            } else {
-                for (i = 0, j = 2; j < (strlen(operand) - 1); i++, j++) {
-                    count[i] = operand[j];
+            } else { // Handle BYTE directive
+                for (i = 0, j = 2; j < (strlen(operand) - 1); i++, j++) {  // Extract characters from BYTE operand
+                    count[i] = operand[j];   // Null-terminate the count string
+
                 }
                 count[i] = '\0';
                 while (!feof(fp_opc)) {
+			   // Check if extracted count matches any code in optab.txt
                     fscanf(fp_opc, "%s %s", a, b);
                     if (strcmp(count, a) == 0) {
-                        fprintf(fp_samp, "0000%s", b);
+                        fprintf(fp_samp, "0000%s", b);  // Write object code for BYTE
                         reclen += 6;
                     }
                 }
@@ -110,7 +112,7 @@ LDA   00
 STA   0c
 LDCH  50
 STCH  54
-Z     7a
+Z     7A
 END   *
 
 length.txt
