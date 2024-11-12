@@ -5,9 +5,9 @@ void convert(char h[12]);   //function to convert bitmask into relocation bits
 char bitmask[12];       //max bit mask length is 12
 char bit[12] = {0};
 void main() {
-    char input[10], binary[12], relocbit, ch, pn[5];
+    char input[10], relocbit, ch, pn[5];
     int add[6], length[10];
-    int start, inp, len, i, address, opcode, addr, actualadd, tlen;
+    int start, len, i, address, opcode, addr, actualadd, tlen;
     FILE *fp1, *fp2;
     printf("\n\n Enter the actual starting address : ");    //getting starting address from user
     scanf("%x", &start);
